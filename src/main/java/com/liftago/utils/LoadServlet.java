@@ -18,12 +18,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @WebServlet(urlPatterns = {"/load"}, asyncSupported = true)
-public class LoadServlet  extends HttpServlet {
+public class LoadServlet extends HttpServlet {
 
-    private static final int MAX_CONN_COUNT = 1000;
+    private static final int MAX_CONN_COUNT = 20000;
     private static final int MAX_MSG_PER_CONN = 5;
     private static final int WORKER_COUNT = 10;
-    private static AtomicInteger connCount = new AtomicInteger();
+    private static AtomicInteger connCount = new AtomicInteger(0);
     private static AtomicLong totalTime = new AtomicLong(0);
     private static AtomicBoolean interrupted = new AtomicBoolean(false);
     private static final AtomicInteger doAmqpStuffCount = new AtomicInteger(1);
@@ -34,10 +34,10 @@ public class LoadServlet  extends HttpServlet {
     private static ConnectionFactory factory = new ConnectionFactory();
     static {
         factory.setVirtualHost("/");
-        factory.setHost("37.61.197.145");
+        factory.setHost("37.61.197.137");
         factory.setPort(5672);
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setUsername("rabbit");
+        factory.setPassword("MQ6prd06");
     }
 
     @Override
