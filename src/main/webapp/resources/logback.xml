@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger{36} [%file:%line] [%X{correlationId}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>out.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>out.%d{yyyy-MM-dd}.log</fileNamePattern>             <!-- daily rollover -->
+            <maxHistory>30</maxHistory> <!-- in days -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SPLUNK_RAW_TCP" class="com.heyitworks.logback4splunk.SplunkRawTCPAppender">
+        <port>20975</port>
+        <host>logs5.splunkstorm.com</host>
+        <maxQueueSize>5MB</maxQueueSize>
+        <dropEventsOnQueueFull>true</dropEventsOnQueueFull>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%-5level [%thread] %logger{5} [%file:%line] [%X{correlationId}] %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="SPLUNK_RAW_TCP" />
+    </root>
+
+</configuration>
